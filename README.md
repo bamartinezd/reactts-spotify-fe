@@ -1,46 +1,42 @@
-# Getting Started with Create React App
+Please clone and type *_npm i_*
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+To install all dependencies from *_package.json_*
 
-## Available Scripts
+after that type and execute *_npm run build_* to build or *_npm start_* to open a browser and execute.
 
-In the project directory, you can run:
+## Authentication with authorization code
 
-### `npm start`
+https://accounts.spotify.com/authorize
+	?response_type=code
+	&client_id=a4819256614348ae8aead5defa741c51
+	&scope=user-read-private%20user-read-email
+	&redirect_uri=http%3A%2F%2Flocalhost%3A8888%2F
+	&state=qcj5Bc2cFilznrbI
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Authentication with client credentials
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+	curl -X POST 'https://accounts.spotify.com/api/token' \
+	-H "Authorization: Basic YTQ4MTkyNTY2MTQzNDhhZThhZWFkNWRlZmE3NDFjNTE6ODViZTgzN2UyMzFhNDRmMjgxNDQ5MTRmYTgyOGQzYjU=" \
+	-d 'grant_type=client_credentials'
 
-### `npm test`
+## Functionality after the Auth
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Get Followed Artists (Needs Auth scope "user-read-private")
+	curl --request GET \
+	--url 'https://api.spotify.com/v1/me/following?type=artist' \
+	--header 'Authorization: Bearer BQAtR3MMOkw1yL5-whs_3smMHu4zjYK6tr7PVMJCLMDtdQGJwdoJoHLgn9ZS7rbixid78eIxMnLdLRKzYbmn9qBPcBEyxmP9y9Atk_fTVGyrmowburw'
 
-### `npm run build`
+2. Get more Artist's info
+	curl --request GET \
+  --url 'https://api.spotify.com/v1/artists?ids=2CIMQHirSU0MQqyYHq0eOx%2C57dN52uHvrHOxijzpIgu3E%2C1vCWHaC5f2uS3yhpwWbIA6' \
+  --header 'Authorization: Bearer BQDpwx3tfMTpehCozWuDQo2p2tbqVcS2txUrTXRsgiLwRNXSb4SIQRaZZgwdxsonIBRl_-8uGktDFxwQB5NqdvwFfjNwN8XdsidbZIGFt92IYop7r58'
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. get albums by artist (id, include_groups, market, limit, offset)
+  curl --request GET \
+  --url https://api.spotify.com/v1/artists/5LCDv4TvYRQD5ehflOBEh4/albums \
+  --header 'Authorization: Bearer BQDpwx3tfMTpehCozWuDQo2p2tbqVcS2txUrTXRsgiLwRNXSb4SIQRaZZgwdxsonIBRl_-8uGktDFxwQB5NqdvwFfjNwN8XdsidbZIGFt92IYop7r58'
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+4. Get tracks by album (albumId,market,limit,offset)
+	curl --request GET \
+  --url https://api.spotify.com/v1/albums/4aawyAB9vmqN3uQ7FjRGTy/tracks \
+  --header 'Authorization: Bearer BQDpwx3tfMTpehCozWuDQo2p2tbqVcS2txUrTXRsgiLwRNXSb4SIQRaZZgwdxsonIBRl_-8uGktDFxwQB5NqdvwFfjNwN8XdsidbZIGFt92IYop7r58'
